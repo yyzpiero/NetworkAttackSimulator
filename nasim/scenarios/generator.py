@@ -10,6 +10,7 @@ import numpy as np
 import nasim.scenarios.utils as u
 from nasim.scenarios import Scenario
 from nasim.scenarios.host import Host
+from nasim.scenarios.network_generator_yz import nasim_toplogy_subnet
 
 # Constants for generating network
 USER_SUBNET_SIZE = 5
@@ -92,6 +93,7 @@ class ScenarioGenerator:
                  name=None,
                  step_limit=None,
                  address_space_bounds=None,
+                 yz_gen=False,
                  **kwargs):
         """Generate the network configuration based on standard formula.
 
@@ -192,9 +194,11 @@ class ScenarioGenerator:
 
         if num_privescs is None:
             num_privescs = num_processes
-
-        self._generate_subnets(num_hosts)
-        self._generate_topology()
+        if not yz_gen:
+            self._generate_subnets(num_hosts)
+            self._generate_topology()
+        else:
+            self._generate_subnets_toplogy_yz(num_hosts)
         self._generate_address_space_bounds(address_space_bounds)
         self._generate_os(num_os)
         self._generate_services(num_services)
@@ -298,6 +302,9 @@ class ScenarioGenerator:
             if child_right < num_subnets:
                 topology[row][child_right] = 1
         self.topology = topology
+
+    def _generate_subnets_toplogy_yz(self, num_hosts):
+        self.subnets , self.topology = nasim_toplogy_subnet(num_hosts)
 
     def _generate_address_space_bounds(self, address_space_bounds):
         if address_space_bounds is None:
