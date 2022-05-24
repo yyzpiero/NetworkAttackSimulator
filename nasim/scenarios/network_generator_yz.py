@@ -315,11 +315,11 @@ def subnet_topology(n_nodes, subnet_size="small", domain_size="small", loops=Tru
     Default Example
     100 Hosts,  
     '''
-    avg_subnet_size = 2
-    _bias = 1
+    avg_subnet_size = 5
+    _bias = 2
     n_user_subnets, subnets_assign = random_group_assgin(n_nodes, avg_subnet_size, bias=_bias)
 
-    avg_domain_size = random.randint(1, 3)
+    avg_domain_size = random.randint(3, 6)
 
     n_domains, domains_assign =  random_group_assgin(n_user_subnets, avg_domain_size, bias=1)
 
