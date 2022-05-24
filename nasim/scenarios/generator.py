@@ -94,6 +94,7 @@ class ScenarioGenerator:
                  step_limit=None,
                  address_space_bounds=None,
                  yz_gen=False,
+                 save_fig=False,
                  **kwargs):
         """Generate the network configuration based on standard formula.
 
@@ -198,7 +199,7 @@ class ScenarioGenerator:
             self._generate_subnets(num_hosts)
             self._generate_topology()
         else:
-            self._generate_subnets_toplogy_yz(num_hosts)
+            self._generate_subnets_toplogy_yz(num_hosts, save_fig)
         self._generate_address_space_bounds(address_space_bounds)
         self._generate_os(num_os)
         self._generate_services(num_services)
@@ -303,8 +304,8 @@ class ScenarioGenerator:
                 topology[row][child_right] = 1
         self.topology = topology
 
-    def _generate_subnets_toplogy_yz(self, num_hosts):
-        self.subnets , self.topology = nasim_toplogy_subnet(num_hosts)
+    def _generate_subnets_toplogy_yz(self, num_hosts, save_fig=False):
+        self.subnets , self.topology = nasim_toplogy_subnet(num_hosts, save_fig)
 
     def _generate_address_space_bounds(self, address_space_bounds):
         if address_space_bounds is None:

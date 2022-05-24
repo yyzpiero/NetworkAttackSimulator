@@ -415,7 +415,7 @@ def hosts_topology_from_subnet(subnet_graph, n_nodes, subnets_assign=None, n_sub
     return subnet_graph
    
 
-def plot_topology(topology_matrix, filename="./fig.png"):
+def plot_topology(topology_matrix, filename="./figure/tmp_fig.png"):
     
     G = nx.Graph(topology_matrix) 
     G.remove_edges_from(nx.selfloop_edges(G))
@@ -426,9 +426,11 @@ def plot_topology(topology_matrix, filename="./fig.png"):
     plt.savefig(filename)
 
 
-def nasim_toplogy_subnet(n_nodes):
+def nasim_toplogy_subnet(n_nodes, save_fig=False):
     subnet_graph, subnets_assign, topology= subnet_topology(n_nodes=n_nodes, return_matrix=True)
     _, subnet = hosts_topology_from_subnet(subnet_graph, n_nodes=n_nodes, subnets_assign=subnets_assign, n_subnets=None, return_vec=True)
+    if save_fig:
+        plot_topology(subnet_topology_matrix)
     return subnet, topology
 
 
