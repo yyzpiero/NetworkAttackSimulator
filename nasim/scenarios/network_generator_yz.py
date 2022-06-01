@@ -116,7 +116,7 @@ def check_num_edges(nodes, num_edges, loops, multigraph, digraph):
     if loops:
         max_edges += num_nodes
     if not multigraph and num_edges > max_edges:
-            raise ValueError('num_edges greater than maximum (%i)' % max_edges)
+        raise ValueError('num_edges greater than maximum (%i)' % max_edges)
 
 
 def naive(nodes, num_edges, loops=False, multigraph=False, digraph=False):
@@ -430,7 +430,7 @@ def nasim_toplogy_subnet(n_nodes, save_fig=False):
     subnet_graph, subnets_assign, topology= subnet_topology(n_nodes=n_nodes, return_matrix=True)
     _, subnet = hosts_topology_from_subnet(subnet_graph, n_nodes=n_nodes, subnets_assign=subnets_assign, n_subnets=None, return_vec=True)
     if save_fig:
-        plot_topology(subnet_topology_matrix)
+        plot_topology(topology)
     return subnet, topology
 
 

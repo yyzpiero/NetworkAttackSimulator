@@ -12,6 +12,9 @@ from nasim.scenarios import Scenario
 from nasim.scenarios.host import Host
 from nasim.scenarios.network_generator_yz import nasim_toplogy_subnet
 
+import matplotlib.pyplot as plt
+import networkx as nx
+
 # Constants for generating network
 USER_SUBNET_SIZE = 5
 HOST_ASSIGNMENT_PERIOD = 40
@@ -195,11 +198,16 @@ class ScenarioGenerator:
 
         if num_privescs is None:
             num_privescs = num_processes
-        if not yz_gen:
+        
+        if yz_gen==False:
             self._generate_subnets(num_hosts)
             self._generate_topology()
         else:
-            self._generate_subnets_toplogy_yz(num_hosts, save_fig)
+            self._generate_subnets_toplogy_yz(num_hosts)
+        
+        if save_fig:
+            self._plot_topology(self.topology)
+
         self._generate_address_space_bounds(address_space_bounds)
         self._generate_os(num_os)
         self._generate_services(num_services)
@@ -305,7 +313,7 @@ class ScenarioGenerator:
         self.topology = topology
 
     def _generate_subnets_toplogy_yz(self, num_hosts, save_fig=False):
-        self.subnets , self.topology = nasim_toplogy_subnet(num_hosts, save_fig)
+        self.subnets, self.topology = nasim_toplogy_subnet(num_hosts, save_fig)
 
     def _generate_address_space_bounds(self, address_space_bounds):
         if address_space_bounds is None:
@@ -896,3 +904,13 @@ class ScenarioGenerator:
                         dest_avail.remove(dest_allowed)
                 firewall[(src, dest)] = allowed
         self.firewall = firewall
+
+    def _plot_topology(self, topology_matrix, filename="./figure/tmp_fig.png"):
+    
+        G = nx.Graph(topology_matrix) 
+        G.remove_edges_from(nx.selfloop_edges(G))
+        pos = nx.kamada_kawai_layout(G)
+
+        nx.draw(G, pos=pos, node_size=100, with_labels=True)
+        plt.axis('equal')
+        plt.savefig(filename)

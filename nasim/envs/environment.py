@@ -381,7 +381,9 @@ class NASimEnv(gym.Env):
         mask = np.zeros(self.action_space.n, dtype=np.int64)
         for a_idx in range(self.action_space.n):
             action = self.action_space.get_action(a_idx)
-            if self.network.host_discovered(action.target):
+            #if self.network.hosts[action.target].discovered:
+            #print(self.current_state.hosts[self.current_state.host_num_map[action.target]][1].discovered)
+            if self.current_state.hosts[self.current_state.host_num_map[action.target]][1].discovered == 1.0:
                 mask[a_idx] = 1
         return mask
 
