@@ -538,6 +538,18 @@ class NoOp(Action):
                          req_access=AccessLevel.NONE)
 
 
+class MultiDiscrete_None(Action):
+    """A do nothing action in the environment
+    Inherits from the base Action Class
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(name="MultiDiscrete_Null",
+                         target=(1, 0),
+                         cost=50.0,
+                         prob=1.0,
+                         req_access=AccessLevel.NONE)
+
 class ActionResult:
     """A dataclass for storing the results of an Action.
 
@@ -834,7 +846,8 @@ class ParameterisedActionSpace(spaces.MultiDiscrete):
             a_def = self._get_privesc_def(proc, os)
 
         if a_def is None:
-            return NoOp()
+            #return NoOp()
+            return MultiDiscrete_None()
         return a_class(target=target, **a_def)
 
     def _get_scan_action_def(self, a_class):

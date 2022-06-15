@@ -376,13 +376,21 @@ class NASimEnv(gym.Env):
             index will be 1 if action is valid given current state, or
             0 if action is invalid.
         """
-        assert isinstance(self.action_space, FlatActionSpace), \
+        if isinstance(self.action_space, FlatActionSpace):
             "Can only use action mask function when using flat action space"
-        mask = np.zeros(self.action_space.n, dtype=np.int64)
-        for a_idx in range(self.action_space.n):
-            action = self.action_space.get_action(a_idx)
-            if self.current_state.hosts[self.current_state.host_num_map[action.target]][1].discovered == 1.0:
-                mask[a_idx] = 1
+            mask = np.zeros(self.action_space.n, dtype=np.int64)
+            for a_idx in range(self.action_space.n):
+                action = self.action_space.get_action(a_idx)
+                if self.current_state.hosts[self.current_state.host_num_map[action.target]][1].discovered == 1.0:
+                    mask[a_idx] = 1
+        
+        else:
+            mask = np.zeros(self.action_space.nvec, dtype=np.int64)
+            for host in self.current_state.hosts:
+                if host[1].discovered == 1:
+                    mask[:, host[0][0]-1, host[0][1],:,:,:] = 1 
+                else:
+                    mask[2:, host[0][0]-1, host[0][1],:,:,:] = 1 
         return mask
 
     def get_score_upper_bound(self):
